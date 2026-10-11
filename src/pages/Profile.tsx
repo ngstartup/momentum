@@ -10,13 +10,7 @@ import { weekdayShort } from '../domain/dates'
 import type { Category, DateFormat, UserPreferences } from '../domain/types'
 import { Button, Field, IconButton, Segmented, Sheet, confirmDialog, toast } from '../ui/kit'
 import { COLOR_CHOICES } from '../ui/icons'
-
-function download(name: string, text: string, type: string) {
-  const url = URL.createObjectURL(new Blob([text], { type }))
-  const a = document.createElement('a')
-  a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove()
-  setTimeout(() => URL.revokeObjectURL(url), 1000)
-}
+import { isNativeApp, saveFile } from '../ui/download'
 
 export default function Profile() {
   const { t, locale } = useT()
@@ -168,12 +162,21 @@ export default function Profile() {
         )}
       </section>
 
+      {!isNativeApp() && (
+        <section className={section}>
+          <h2 className={h2}>{t('Installer sur Android')}</h2>
+          <p className="text-sm text-muted">{t('Application Android native (APK). Elle charge toujours la dernière version publiée : pas besoin de la réinstaller à chaque mise à jour. Autorisez l’installation depuis cette source quand Android le demande.')}</p>
+          <a href="momentum.apk" download className="inline-flex items-center gap-2 rounded-xl border border-line bg-surface2 px-4 py-2.5 text-[15px] font-medium hover:brightness-125"><Download size={16} />{t('Télécharger l’APK')}</a>
+          <p className="text-xs text-muted">{t('Attention : les données de l’application Android sont séparées de celles du navigateur. Exportez puis restaurez une sauvegarde pour les transférer.')}</p>
+        </section>
+      )}
+
       <section className={section}>
         <h2 className={h2}>{t('Données, sauvegarde et confidentialité')}</h2>
         <p className="text-sm text-muted">{t('Vos données restent sur cet appareil (IndexedDB) : aucun compte, aucune synchronisation cloud. Si l’appareil est perdu ou réinitialisé, elles ne sont pas récupérables : faites des sauvegardes régulières.')}</p>
         <div className="flex flex-wrap gap-2">
-          <Button onClick={() => { download(`momentum-sauvegarde-${today}.json`, JSON.stringify(s.exportBackup(), null, 2), 'application/json'); toast(t('Sauvegarde exportée.')) }}><Download size={16} />{t('Sauvegarde JSON')}</Button>
-          <Button onClick={() => { download(`momentum-historique-${today}.csv`, logsToCsv(s), 'text/csv'); toast(t('CSV exporté.')) }}><Download size={16} />{t('Historique CSV')}</Button>
+          <Button onClick={async () => { try { await saveFile(`momentum-sauvegarde-${today}.json`, JSON.stringify(s.exportBackup(), null, 2), 'application/json'); toast(t('Sauvegarde exportée.')) } catch { toast(t('Export annulé ou impossible.')) } }}><Download size={16} />{t('Sauvegarde JSON')}</Button>
+          <Button onClick={async () => { try { await saveFile(`momentum-historique-${today}.csv`, logsToCsv(s), 'text/csv'); toast(t('CSV exporté.')) } catch { toast(t('Export annulé ou impossible.')) } }}><Download size={16} />{t('Historique CSV')}</Button>
           <Button disabled={importing} onClick={() => fileRef.current?.click()}><Upload size={16} />{t('Restaurer…')}</Button>
           <input ref={fileRef} type="file" accept="application/json,.json" className="hidden" aria-label={t('Fichier de sauvegarde')} onChange={(e) => onFile(e.target.files?.[0])} />
         </div>

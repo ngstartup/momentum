@@ -24,6 +24,24 @@ npm run preview    # servir le build localement
 `dist/` est un site statique (routage par hash `#/…`, donc aucune règle de réécriture serveur) : à déposer tel quel sur Netlify, Cloudflare Pages, GitHub Pages, ou un simple hébergement statique **en HTTPS** (requis pour le service worker et l'installation). `base: './'` permet un sous-dossier.
 Installation : menu du navigateur → « Installer l'application » / « Ajouter à l'écran d'accueil ».
 
+## Application Android native (APK)
+
+`android/` est un projet Capacitor : une coque native qui **charge le site publié** (`capacitor.config.ts` → `server.url`). Chaque déploiement GitHub Pages est donc reçu sans réinstaller l'APK ; le service worker garde l'app utilisable hors-ligne après la première ouverture. L'export JSON/CSV passe par la feuille de partage Android.
+
+- Téléchargement : https://ngstartup.github.io/momentum/momentum.apk (aussi proposé dans Profil → « Installer sur Android »).
+- Les données de l'APK sont **séparées** de celles du navigateur (autre stockage) : exporter puis restaurer pour les transférer.
+- Les notifications système ne fonctionnent pas dans la WebView : les rappels s'affichent dans l'app ouverte.
+
+Recompiler l'APK (Android Studio installé, JDK = `jbr` d'Android Studio) :
+
+```bash
+npm run build && npx cap sync android
+cd android && ./gradlew assembleRelease
+# → android/app/build/outputs/apk/release/app-release.apk, à copier dans public/momentum.apk
+```
+
+Signature : la clé `momentum.jks` et ses mots de passe sont **hors dépôt**, dans `C:/Users/HP/momentum-signing/`. **Sauvegardez ce dossier** : sans cette clé, une nouvelle version de l'APK ne pourra plus remplacer l'ancienne (il faudrait désinstaller, donc perdre les données non exportées).
+
 ## Architecture
 
 ```
