@@ -1,0 +1,136 @@
+@import 'tailwindcss';
+
+:root,
+:root[data-theme='dark'] {
+  --bg: #0d1117;
+  --surface: #151b23;
+  --surface2: #1d2632;
+  --text: #f3f4f6;
+  --muted: #9ca3af;
+  --green: #8faf9a;
+  --danger: #e5786d;
+  --border: rgba(255, 255, 255, 0.08);
+  --accent: #d8b56d;
+  --accent-text: var(--accent);
+  --on-accent: #14110a;
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
+}
+:root[data-theme='light'] {
+  --bg: #f6f4ef;
+  --surface: #ffffff;
+  --surface2: #eceef2;
+  --text: #161b22;
+  --muted: #566070;
+  --green: #4f7a62;
+  --danger: #c0463b;
+  --border: rgba(22, 27, 34, 0.1);
+  --accent-text: color-mix(in srgb, var(--accent) 50%, #000);
+  --on-accent: #14110a;
+  --shadow: 0 8px 28px rgba(22, 27, 34, 0.1);
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface2: var(--surface2);
+  --color-ink: var(--text);
+  --color-muted: var(--muted);
+  --color-green: var(--green);
+  --color-danger: var(--danger);
+  --color-line: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-text);
+  --color-on-accent: var(--on-accent);
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+input,
+select,
+textarea {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.65rem 0.8rem;
+  color: var(--text);
+  width: 100%;
+  font-size: 16px; /* évite le zoom iOS */
+}
+input[type='checkbox'],
+input[type='radio'] {
+  width: auto;
+  accent-color: var(--accent);
+}
+input[type='color'] {
+  padding: 2px;
+  height: 2.5rem;
+}
+::placeholder {
+  color: var(--muted);
+  opacity: 0.8;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+.anim-pop {
+  animation: pop 0.2s ease-out;
+}
+.anim-fade {
+  animation: fade 0.15s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
