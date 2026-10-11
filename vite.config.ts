@@ -15,6 +15,8 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      // l'APK est un téléchargement, pas une page : le service worker ne doit pas le remplacer par index.html
+      workbox: { navigateFallbackDenylist: [/\.apk$/] },
       includeAssets: ['icon.svg'],
       manifest: {
         name: 'Momentum',
