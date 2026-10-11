@@ -4,8 +4,12 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
+const buildId = (process.env.BUILD_ID ?? 'dev').slice(0, 7)
+const buildDate = new Date().toISOString().slice(0, 10)
+
 export default defineConfig({
   base: './',
+  define: { __BUILD__: JSON.stringify(`${buildDate} · ${buildId}`) },
   plugins: [
     react(),
     tailwindcss(),

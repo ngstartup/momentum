@@ -180,7 +180,7 @@ export default function Profile() {
         <Button variant="danger" onClick={erase}><Trash2 size={16} />{t('Tout effacer')}</Button>
       </section>
 
-      <p className="pb-4 text-center text-xs text-muted">Momentum · {t('Deviens constant. Construis ta meilleure version.')}</p>
+      <p className="pb-4 text-center text-xs text-muted">Momentum · {t('Deviens constant. Construis ta meilleure version.')}<br />{t('Version')} {typeof __BUILD__ === 'string' ? __BUILD__ : 'dev'}</p>
       <CategorySheet key={catEdit.cat?.id ?? 'new'} open={catEdit.open} cat={catEdit.cat} onClose={() => setCatEdit({ open: false })} />
     </div>
   )

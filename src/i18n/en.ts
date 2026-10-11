@@ -447,6 +447,8 @@ export const en: Record<string, string> = {
   'en attente': 'pending',
   'Fermer': 'Close',
   'Confirmer': 'Confirm',
+  'Version': 'Version',
+  'Mise à jour installée.': 'Update installed.',
   'Momentum — rappel': 'Momentum — reminder',
   'Statistiques de la période': 'Period statistics',
 }
